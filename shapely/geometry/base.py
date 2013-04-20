@@ -1,7 +1,7 @@
 """Base geometry class and utilities
 """
-
-from ctypes import pointer, c_size_t, c_char_p, c_void_p
+from ctypes import byref, c_double, c_uint, pointer, c_size_t, c_char_p, \
+     c_void_p
 import sys
 import warnings
 
@@ -416,6 +416,28 @@ class BaseGeometry(object):
     def contains(self, other):
         """Returns True if the geometry contains the other, else False"""
         return bool(self.impl['contains'](self, other))
+
+    def nearest_points(self, other):
+        """Returns list of tuples like (x, y) of nearest points"""
+        _ndim = 2 # TODO: remove hardcoding
+        _cseq = self.impl['nearest_points'](self, other)
+        cs_len = c_uint(0)
+        lgeos.GEOSCoordSeq_getSize(_cseq, byref(cs_len))
+        llen = cs_len.value
+        dx = c_double()
+        dy = c_double()
+        dz = c_double()
+        has_z = _ndim == 3
+        res = []
+        for i in xrange(llen):
+            lgeos.GEOSCoordSeq_getX(_cseq, i, byref(dx))
+            lgeos.GEOSCoordSeq_getY(_cseq, i, byref(dy))
+            if has_z:
+                lgeos.GEOSCoordSeq_getZ(_cseq, i, byref(dz))
+                res.append((dx.value, dy.value, dz.value))
+            else:
+                res.append((dx.value, dy.value))
+        return res
 
     def crosses(self, other):
         """Returns True if the geometries cross, else False"""
