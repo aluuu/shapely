@@ -377,8 +377,17 @@ class LGEOS17(LGEOS16LR):
         self.methods['unary_union'] = self.GEOSUnaryUnion
         self.methods['cascaded_union'] = self.methods['unary_union']
 
+class LGEOS18(LGEOS17):
+    """Proxy for the reentrant GEOS_C DLL/SO API version 1.8
+    """
+    geos_capi_version = (1, 8, 0)
+    def __init__(self, dll):
+        super(LGEOS18, self).__init__(dll)
+        self.methods['nearest_points'] = self.GEOSNearestPoints
 
-if geos_c_version >= (1, 7, 0):
+if geos_c_version >= (1, 8, 0):
+    L = LGEOS18
+elif geos_c_version >= (1, 7, 0):
     L = LGEOS17
 elif geos_c_version >= (1, 6, 0):
     if hasattr(_lgeos, 'GEOSProject'):

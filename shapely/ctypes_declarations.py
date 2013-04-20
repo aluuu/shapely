@@ -271,18 +271,22 @@ def prototype(lgeos, geosVersion):
             lgeos.GEOSProject.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
 
             lgeos.GEOSProjectNormalized.restype = ctypes.c_double
-            lgeos.GEOSProjectNormalized.argtypes = [ctypes.c_void_p, 
+            lgeos.GEOSProjectNormalized.argtypes = [ctypes.c_void_p,
                                                     ctypes.c_void_p]
 
             lgeos.GEOSInterpolate.restype = ctypes.c_void_p
-            lgeos.GEOSInterpolate.argtypes = [ctypes.c_void_p, 
+            lgeos.GEOSInterpolate.argtypes = [ctypes.c_void_p,
                                               ctypes.c_double]
 
             lgeos.GEOSInterpolateNormalized.restype = ctypes.c_void_p
-            lgeos.GEOSInterpolateNormalized.argtypes = [ctypes.c_void_p, 
+            lgeos.GEOSInterpolateNormalized.argtypes = [ctypes.c_void_p,
                                                         ctypes.c_double]
 
     # TODO: Find out what version of geos_c came with geos 3.3.0
     if geosVersion >= (1, 6, 3):
         lgeos.GEOSUnaryUnion.restype = ctypes.c_void_p
         lgeos.GEOSUnaryUnion.argtypes = [ctypes.c_void_p]
+
+    if geosVersion >= (1, 8, 0):
+        lgeos.GEOSNearestPoints.restype = ctypes.c_void_p
+        lgeos.GEOSNearestPoints.argtypes = [ctypes.c_void_p, ctypes.c_void_p]

@@ -108,6 +108,9 @@ IMPL16LR = {
     'interpolate_normalized': (InterpolateOp, 'interpolate_normalized'),
     'interpolate': (InterpolateOp, 'interpolate'),
     }
+IMPL18 = {
+    'nearest_points': (BinaryPredicate, 'nearest_points'),
+    }
 
 def impl_items(defs):
     return [(k, v[0](v[1])) for k, v in defs.items()]
@@ -119,5 +122,7 @@ if lgeos.geos_capi_version >= (1, 6, 0):
     imp.update(impl_items(IMPL16))
     if 'project' in lgeos.methods:
         imp.update(impl_items(IMPL16LR))
+if lgeos.geos_capi_version >= (1, 8, 0):
+    imp.update(impl_items(IMPL18))
 
 DefaultImplementation = imp
